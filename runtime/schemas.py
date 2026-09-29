@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 from enum import Enum
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
@@ -30,6 +30,17 @@ class ToolCall(BaseModel):
     tool_name: str
     arguments: dict[str, Any] = Field(default_factory=dict)
 
+class ToolCallDecision(BaseModel):
+    type: Literal["tool_call"] = "tool_call"
+    tool_call: ToolCall
+
+
+class FinalDecision(BaseModel):
+    type: Literal["final"] = "final"
+    final_answer: str
+
+
+AgentDecision = ToolCallDecision | FinalDecision
 
 class TraceStep(BaseModel):
     step_index: int
@@ -40,6 +51,8 @@ class TraceStep(BaseModel):
 
     latency_ms: float | None = None
 
+    model_output: dict[str, Any] | None = None
+
     tool_name: str | None = None
     tool_arguments: dict[str, Any] | None = None
     tool_result: Any | None = None
@@ -47,7 +60,7 @@ class TraceStep(BaseModel):
     message: str | None = None
     error_type: str | None = None
     error_message: str | None = None
-
+    
 
 class RunTrace(BaseModel):
     run_id: str

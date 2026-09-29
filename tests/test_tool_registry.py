@@ -5,13 +5,21 @@ from runtime.schemas import ToolCall
 from runtime.runner import AgentRuntime
 from runtime.tool_registry import ToolRegistry
 from tools.service_status import GetServiceStatusTool
+from tests.fakes import ScriptedModel
 
 
 def build_runtime() -> AgentRuntime:
     registry = ToolRegistry()
     registry.register(GetServiceStatusTool())
 
-    return AgentRuntime(registry)
+    unused_model = ScriptedModel(
+        decisions=[]
+    )
+
+    return AgentRuntime(
+        tool_registry=registry,
+        model_client=unused_model,
+    )
 
 
 def test_execute_valid_tool_call():

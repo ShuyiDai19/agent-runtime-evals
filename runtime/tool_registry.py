@@ -21,6 +21,13 @@ class Tool(ABC):
     ) -> BaseModel:
         return self.args_schema.model_validate(arguments)
 
+    def get_spec(self) -> dict[str, Any]:
+        return {
+            "name": self.name,
+            "description": self.description,
+            "parameters": self.args_schema.model_json_schema(),
+        }
+
 
 class ToolRegistry:
     def __init__(self) -> None:
@@ -55,3 +62,9 @@ class ToolRegistry:
         validated = tool.validate_arguments(arguments)
 
         return tool.execute(**validated.model_dump())
+
+    def get_tool_specs(self) -> list[dict[str, Any]]:
+        return [
+            tool.get_spec()
+            for tool in self._tools.values()
+        ]
