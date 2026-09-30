@@ -35,7 +35,10 @@ class OpenAIModelClient(ModelClient):
         self,
         model: str = "gpt-5.6-luna",
     ) -> None:
-        self.client = OpenAI()
+        self.client = OpenAI(
+            timeout=30.0,
+            max_retries=1,
+        )
         self.model = model
 
     def decide(
