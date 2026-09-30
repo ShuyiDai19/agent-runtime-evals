@@ -1,9 +1,11 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from runtime.tool_registry import Tool
 
 
 class GetServiceStatusArgs(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     service: str
 
 

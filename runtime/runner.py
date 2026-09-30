@@ -192,18 +192,21 @@ class AgentRuntime:
         trace: RunTrace,
         final_answer: str,
     ) -> None:
+        now = utc_now()
+
         final_step = TraceStep(
             step_index=len(trace.steps),
             step_type=StepType.FINAL,
             message=final_answer,
-            completed_at=utc_now(),
+            started_at=now,
+            completed_at=now,
         )
 
         trace.steps.append(final_step)
 
         trace.status = RunStatus.SUCCESS
         trace.final_answer = final_answer
-        trace.completed_at = utc_now()
+        trace.completed_at = now
 
         self._set_total_latency(trace)
 

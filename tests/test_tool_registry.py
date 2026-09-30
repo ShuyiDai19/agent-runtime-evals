@@ -6,6 +6,8 @@ from runtime.runner import AgentRuntime
 from runtime.tool_registry import ToolRegistry
 from tools.service_status import GetServiceStatusTool
 from tests.fakes import ScriptedModel
+from tools.deployments import GetRecentDeploymentsTool
+from tools.log_search import SearchLogsTool
 
 
 def build_runtime() -> AgentRuntime:
@@ -94,3 +96,29 @@ def test_unknown_tool():
         )
 
     assert trace.steps[0].error_type == "KeyError"
+
+def test_registry_exposes_all_incident_tools():
+    registry = ToolRegistry()
+
+    registry.register(
+        GetServiceStatusTool()
+    )
+
+    registry.register(
+        GetRecentDeploymentsTool()
+    )
+
+    registry.register(
+        SearchLogsTool()
+    )
+
+    names = {
+        tool.name
+        for tool in registry.list_tools()
+    }
+
+    assert names == {
+        "get_service_status",
+        "get_recent_deployments",
+        "search_logs",
+    }
