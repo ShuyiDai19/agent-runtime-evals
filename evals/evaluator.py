@@ -11,9 +11,56 @@ from evals.metrics import (
     required_tool_coverage,
     tool_call_efficiency,
     tool_precision,
+    total_model_latency_ms,
+    total_tool_latency_ms,
 )
 from evals.schemas import EvalCase, EvalResult
 from runtime.schemas import RunStatus, RunTrace
+
+
+def classify_failures(
+    *,
+    runtime_succeeded: bool,
+    coverage: float,
+    precision: float,
+    arg_accuracy: float,
+    answer_coverage: float,
+    duplicates: int,
+    extras: int,
+    sequence_match: bool,
+    require_exact_sequence: bool,
+) -> list[str]:
+    reasons: list[str] = []
+
+    if not runtime_succeeded:
+        reasons.append("runtime_failure")
+
+    if coverage < 1.0:
+        reasons.append("missing_required_tool")
+
+    if precision < 1.0:
+        reasons.append("unnecessary_tool")
+
+    if arg_accuracy < 1.0:
+        reasons.append("incorrect_tool_arguments")
+
+    if answer_coverage < 1.0:
+        reasons.append("missing_answer_evidence")
+
+    if duplicates > 0:
+        reasons.append("duplicate_tool_call")
+
+
+    if extras > 0:
+        reasons.append("extra_tool_call")
+
+    if (
+        require_exact_sequence
+        and not sequence_match
+    ):
+        reasons.append("incorrect_tool_sequence")
+
+    return reasons
 
 
 def evaluate_trace(
@@ -86,18 +133,30 @@ def evaluate_trace(
         task_success
         and precision == 1.0
         and duplicates == 0
-        and extras == 0
         and (
             sequence_match
             or not case.require_exact_tool_sequence
         )
     )
 
+    failure_reasons = classify_failures(
+        runtime_succeeded=runtime_succeeded,
+        coverage=coverage,
+        precision=precision,
+        arg_accuracy=arg_accuracy,
+        answer_coverage=answer_coverage,
+        duplicates=duplicates,
+        extras=extras,
+        sequence_match=sequence_match,
+        require_exact_sequence=(
+            case.require_exact_tool_sequence
+        ),
+    )
+
     return EvalResult(
         case_id=case.id,
         runtime_status=trace.status.value,
 
-        expected_tools=case.expected_tools,
         actual_tools=actual_tools,
 
         required_tool_coverage=coverage,
@@ -105,9 +164,7 @@ def evaluate_trace(
         argument_accuracy=arg_accuracy,
         answer_term_coverage=answer_coverage,
 
-        exact_tool_sequence_match=(
-            sequence_match
-        ),
+        exact_tool_sequence_match=sequence_match,
 
         duplicate_tool_calls=duplicates,
         extra_tool_calls=extras,
@@ -119,4 +176,16 @@ def evaluate_trace(
 
         task_success=task_success,
         trajectory_pass=trajectory_pass,
+
+        total_latency_ms=(
+            trace.total_latency_ms or 0.0
+        ),
+        model_latency_ms=(
+            total_model_latency_ms(trace)
+        ),
+        tool_latency_ms=(
+            total_tool_latency_ms(trace)
+        ),
+
+        failure_reasons=failure_reasons,
     )

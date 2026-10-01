@@ -50,3 +50,14 @@ class EvalResult(BaseModel):
 
     task_success: bool
     trajectory_pass: bool
+
+
+    total_latency_ms: float
+    model_latency_ms: float
+    tool_latency_ms: float
+
+    failure_reasons: list[str] = Field(
+        default_factory=list
+    )
+
+    

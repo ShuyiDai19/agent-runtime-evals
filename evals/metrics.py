@@ -201,3 +201,33 @@ def tool_call_efficiency(
     )
 
     return coverage * overhead_factor
+
+def total_model_latency_ms(
+    trace: RunTrace,
+) -> float:
+    return sum(
+        step.latency_ms or 0.0
+        for step in trace.steps
+        if step.step_type == StepType.MODEL
+    )
+
+
+def total_tool_latency_ms(
+    trace: RunTrace,
+) -> float:
+    return sum(
+        step.latency_ms or 0.0
+        for step in trace.steps
+        if step.step_type == StepType.TOOL_CALL
+    )
+
+def repeated_tool_name_calls(
+    actual_tools: list[str],
+) -> int:
+    counts = Counter(actual_tools)
+
+    return sum(
+        count - 1
+        for count in counts.values()
+        if count > 1
+    )
