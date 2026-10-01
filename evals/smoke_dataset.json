@@ -1,0 +1,91 @@
+[
+    {
+      "id": "payments_full_incident",
+      "task": "Investigate why payments-api is degraded. Check its current health, recent deployments, and logs before giving the most likely cause.",
+      "expected_tools": [
+        "get_service_status",
+        "get_recent_deployments",
+        "search_logs"
+      ],
+      "expected_tool_arguments": {
+        "get_service_status": {
+          "service": "payments-api"
+        },
+        "get_recent_deployments": {
+          "service": "payments-api"
+        },
+        "search_logs": {
+          "service": "payments-api"
+        }
+      },
+      "required_answer_terms": [
+        "v2.4.1",
+        "merchant_context"
+      ],
+      "require_exact_tool_sequence": true
+    },
+    {
+      "id": "payments_health_check",
+      "task": "Check the current health of payments-api and tell me whether it is healthy or degraded. Only use the service status information needed for this question.",
+      "expected_tools": [
+        "get_service_status"
+      ],
+      "expected_tool_arguments": {
+        "get_service_status": {
+          "service": "payments-api"
+        }
+      },
+      "required_answer_terms": [
+        "degraded"
+      ],
+      "require_exact_tool_sequence": true
+    },
+    {
+      "id": "checkout_health_check",
+      "task": "Check the current operational status of checkout-api. Only retrieve the service status needed to answer.",
+      "expected_tools": [
+        "get_service_status"
+      ],
+      "expected_tool_arguments": {
+        "get_service_status": {
+          "service": "checkout-api"
+        }
+      },
+      "required_answer_terms": [
+        "healthy"
+      ],
+      "require_exact_tool_sequence": true
+    },
+    {
+      "id": "checkout_recent_deployment",
+      "task": "Find the most recent deployment of checkout-api and report its version. Only inspect deployment information.",
+      "expected_tools": [
+        "get_recent_deployments"
+      ],
+      "expected_tool_arguments": {
+        "get_recent_deployments": {
+          "service": "checkout-api"
+        }
+      },
+      "required_answer_terms": [
+        "v3.8.2"
+      ],
+      "require_exact_tool_sequence": true
+    },
+    {
+      "id": "auth_health_check",
+      "task": "Check whether auth-api is currently healthy. Only retrieve its current service status.",
+      "expected_tools": [
+        "get_service_status"
+      ],
+      "expected_tool_arguments": {
+        "get_service_status": {
+          "service": "auth-api"
+        }
+      },
+      "required_answer_terms": [
+        "healthy"
+      ],
+      "require_exact_tool_sequence": true
+    }
+  ]

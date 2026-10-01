@@ -9,7 +9,11 @@ class EvalCase(BaseModel):
     id: str
     task: str
 
-    expected_tools: list[str] = Field(
+    required_tools: list[str] = Field(
+        default_factory=list
+    )
+
+    allowed_tools: list[str] = Field(
         default_factory=list
     )
 
@@ -22,7 +26,7 @@ class EvalCase(BaseModel):
         default_factory=list
     )
 
-    require_exact_tool_sequence: bool = True
+    require_exact_tool_sequence: bool = False
 
 
 class EvalResult(BaseModel):
@@ -51,6 +55,7 @@ class EvalResult(BaseModel):
     task_success: bool
     trajectory_pass: bool
 
+    repeated_tool_calls: int
 
     total_latency_ms: float
     model_latency_ms: float

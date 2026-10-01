@@ -8,6 +8,7 @@ from evals.metrics import (
     extra_tool_calls,
     extract_agent_steps,
     extract_tool_calls,
+    repeated_tool_name_calls,
     required_tool_coverage,
     tool_call_efficiency,
     tool_precision,
@@ -26,6 +27,7 @@ def classify_failures(
     arg_accuracy: float,
     answer_coverage: float,
     duplicates: int,
+    repeated_calls: int,
     extras: int,
     sequence_match: bool,
     require_exact_sequence: bool,
@@ -50,6 +52,8 @@ def classify_failures(
     if duplicates > 0:
         reasons.append("duplicate_tool_call")
 
+    if repeated_calls > 0:
+        reasons.append("repeated_tool_use")
 
     if extras > 0:
         reasons.append("extra_tool_call")
@@ -76,12 +80,12 @@ def evaluate_trace(
 
     coverage = required_tool_coverage(
         actual_tools=actual_tools,
-        expected_tools=case.expected_tools,
+        expected_tools=case.required_tools,
     )
 
     precision = tool_precision(
         actual_tools=actual_tools,
-        expected_tools=case.expected_tools,
+        expected_tools=case.allowed_tools,
     )
 
     arg_accuracy = argument_accuracy(
@@ -96,25 +100,27 @@ def evaluate_trace(
         required_terms=case.required_answer_terms,
     )
 
-    sequence_match = (
-        exact_tool_sequence_match(
-            actual_tools=actual_tools,
-            expected_tools=case.expected_tools,
-        )
+    sequence_match = exact_tool_sequence_match(
+        actual_tools=actual_tools,
+        expected_tools=case.required_tools,
     )
 
     duplicates = duplicate_tool_calls(
         tool_calls
     )
 
+    repeated_calls = repeated_tool_name_calls(
+        actual_tools
+    )
+
     extras = extra_tool_calls(
         actual_tools=actual_tools,
-        expected_tools=case.expected_tools,
+        allowed_tools=case.allowed_tools,
     )
 
     efficiency = tool_call_efficiency(
         actual_tools=actual_tools,
-        expected_tools=case.expected_tools,
+        expected_tools=case.required_tools,
         coverage=coverage,
     )
 
@@ -133,6 +139,7 @@ def evaluate_trace(
         task_success
         and precision == 1.0
         and duplicates == 0
+        and repeated_calls == 0
         and (
             sequence_match
             or not case.require_exact_tool_sequence
@@ -146,6 +153,7 @@ def evaluate_trace(
         arg_accuracy=arg_accuracy,
         answer_coverage=answer_coverage,
         duplicates=duplicates,
+        repeated_calls=repeated_calls,
         extras=extras,
         sequence_match=sequence_match,
         require_exact_sequence=(
@@ -157,6 +165,7 @@ def evaluate_trace(
         case_id=case.id,
         runtime_status=trace.status.value,
 
+        expected_tools=case.required_tools,
         actual_tools=actual_tools,
 
         required_tool_coverage=coverage,
@@ -167,6 +176,7 @@ def evaluate_trace(
         exact_tool_sequence_match=sequence_match,
 
         duplicate_tool_calls=duplicates,
+        repeated_tool_calls=repeated_calls,
         extra_tool_calls=extras,
 
         agent_steps=extract_agent_steps(trace),

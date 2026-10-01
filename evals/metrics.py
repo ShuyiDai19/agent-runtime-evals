@@ -176,11 +176,14 @@ def duplicate_tool_calls(
 
 def extra_tool_calls(
     actual_tools: list[str],
-    expected_tools: list[str],
+    allowed_tools: list[str],
 ) -> int:
-    return max(
-        len(actual_tools) - len(expected_tools),
-        0,
+    allowed_set = set(allowed_tools)
+
+    return sum(
+        1
+        for tool in actual_tools
+        if tool not in allowed_set
     )
 
 

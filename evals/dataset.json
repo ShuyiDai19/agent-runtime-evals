@@ -1,8 +1,13 @@
 [
     {
-      "id": "payments_full_incident",
-      "task": "Investigate why payments-api is degraded. Check its current health, recent deployments, and logs before giving the most likely cause.",
-      "expected_tools": [
+      "id": "payments_incident_vague",
+      "task": "Customers are reporting failures when submitting payments. Investigate payments-api and identify the most likely cause.",
+      "required_tools": [
+        "get_service_status",
+        "get_recent_deployments",
+        "search_logs"
+      ],
+      "allowed_tools": [
         "get_service_status",
         "get_recent_deployments",
         "search_logs"
@@ -22,12 +27,45 @@
         "v2.4.1",
         "merchant_context"
       ],
-      "require_exact_tool_sequence": true
+      "require_exact_tool_sequence": false
     },
     {
-      "id": "payments_health_check",
-      "task": "Check the current health of payments-api and tell me whether it is healthy or degraded. Only use the service status information needed for this question.",
-      "expected_tools": [
+      "id": "inventory_incident_vague",
+      "task": "Inventory requests have recently become slow and unreliable. Investigate inventory-api and determine the most likely cause.",
+      "required_tools": [
+        "get_service_status",
+        "get_recent_deployments",
+        "search_logs"
+      ],
+      "allowed_tools": [
+        "get_service_status",
+        "get_recent_deployments",
+        "search_logs"
+      ],
+      "expected_tool_arguments": {
+        "get_service_status": {
+          "service": "inventory-api"
+        },
+        "get_recent_deployments": {
+          "service": "inventory-api"
+        },
+        "search_logs": {
+          "service": "inventory-api"
+        }
+      },
+      "required_answer_terms": [
+        "v1.7.3",
+        "connection pool"
+      ],
+      "require_exact_tool_sequence": false
+    },
+    {
+      "id": "payments_current_health",
+      "task": "What is happening with payments-api right now?",
+      "required_tools": [
+        "get_service_status"
+      ],
+      "allowed_tools": [
         "get_service_status"
       ],
       "expected_tool_arguments": {
@@ -41,9 +79,12 @@
       "require_exact_tool_sequence": true
     },
     {
-      "id": "checkout_health_check",
-      "task": "Check the current operational status of checkout-api. Only retrieve the service status needed to answer.",
-      "expected_tools": [
+      "id": "checkout_current_health",
+      "task": "Is checkout-api currently operating normally?",
+      "required_tools": [
+        "get_service_status"
+      ],
+      "allowed_tools": [
         "get_service_status"
       ],
       "expected_tool_arguments": {
@@ -57,9 +98,71 @@
       "require_exact_tool_sequence": true
     },
     {
-      "id": "checkout_recent_deployment",
-      "task": "Find the most recent deployment of checkout-api and report its version. Only inspect deployment information.",
-      "expected_tools": [
+      "id": "auth_current_health",
+      "task": "Is there currently an operational problem with auth-api?",
+      "required_tools": [
+        "get_service_status"
+      ],
+      "allowed_tools": [
+        "get_service_status"
+      ],
+      "expected_tool_arguments": {
+        "get_service_status": {
+          "service": "auth-api"
+        }
+      },
+      "required_answer_terms": [
+        "healthy"
+      ],
+      "require_exact_tool_sequence": true
+    },
+    {
+      "id": "payments_recent_change",
+      "task": "What was the latest change deployed to payments-api?",
+      "required_tools": [
+        "get_recent_deployments"
+      ],
+      "allowed_tools": [
+        "get_recent_deployments"
+      ],
+      "expected_tool_arguments": {
+        "get_recent_deployments": {
+          "service": "payments-api"
+        }
+      },
+      "required_answer_terms": [
+        "v2.4.1",
+        "JSON"
+      ],
+      "require_exact_tool_sequence": true
+    },
+    {
+      "id": "inventory_recent_change",
+      "task": "Find the latest deployed version of inventory-api and summarize what changed.",
+      "required_tools": [
+        "get_recent_deployments"
+      ],
+      "allowed_tools": [
+        "get_recent_deployments"
+      ],
+      "expected_tool_arguments": {
+        "get_recent_deployments": {
+          "service": "inventory-api"
+        }
+      },
+      "required_answer_terms": [
+        "v1.7.3",
+        "connection pool"
+      ],
+      "require_exact_tool_sequence": true
+    },
+    {
+      "id": "checkout_recent_change",
+      "task": "What was most recently deployed to checkout-api?",
+      "required_tools": [
+        "get_recent_deployments"
+      ],
+      "allowed_tools": [
         "get_recent_deployments"
       ],
       "expected_tool_arguments": {
@@ -73,19 +176,89 @@
       "require_exact_tool_sequence": true
     },
     {
-      "id": "auth_health_check",
-      "task": "Check whether auth-api is currently healthy. Only retrieve its current service status.",
-      "expected_tools": [
+      "id": "payments_error_evidence",
+      "task": "Find recent application evidence that explains the payment request failures in payments-api.",
+      "required_tools": [
+        "search_logs"
+      ],
+      "allowed_tools": [
+        "search_logs"
+      ],
+      "expected_tool_arguments": {
+        "search_logs": {
+          "service": "payments-api"
+        }
+      },
+      "required_answer_terms": [
+        "merchant_context"
+      ],
+      "require_exact_tool_sequence": true
+    },
+    {
+      "id": "inventory_error_evidence",
+      "task": "Look for recent runtime evidence explaining inventory-api request failures.",
+      "required_tools": [
+        "search_logs"
+      ],
+      "allowed_tools": [
+        "search_logs"
+      ],
+      "expected_tool_arguments": {
+        "search_logs": {
+          "service": "inventory-api"
+        }
+      },
+      "required_answer_terms": [
+        "DBPoolTimeoutError"
+      ],
+      "require_exact_tool_sequence": true
+    },
+    {
+      "id": "unknown_service_health",
+      "task": "Check the current operational status of recommendations-api.",
+      "required_tools": [
+        "get_service_status"
+      ],
+      "allowed_tools": [
         "get_service_status"
       ],
       "expected_tool_arguments": {
         "get_service_status": {
-          "service": "auth-api"
+          "service": "recommendations-api"
+        }
+      },
+      "required_answer_terms": [
+        "unknown"
+      ],
+      "require_exact_tool_sequence": true
+    },
+    {
+      "id": "checkout_possible_incident",
+      "task": "A user says checkout feels slow. Investigate checkout-api and determine whether the available operational evidence shows an active incident.",
+      "required_tools": [
+        "get_service_status",
+        "get_recent_deployments",
+        "search_logs"
+      ],
+      "allowed_tools": [
+        "get_service_status",
+        "get_recent_deployments",
+        "search_logs"
+      ],
+      "expected_tool_arguments": {
+        "get_service_status": {
+          "service": "checkout-api"
+        },
+        "get_recent_deployments": {
+          "service": "checkout-api"
+        },
+        "search_logs": {
+          "service": "checkout-api"
         }
       },
       "required_answer_terms": [
         "healthy"
       ],
-      "require_exact_tool_sequence": true
+      "require_exact_tool_sequence": false
     }
   ]

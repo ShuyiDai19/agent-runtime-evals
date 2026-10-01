@@ -95,29 +95,37 @@ def test_evaluator_passes_good_trajectory():
     case = EvalCase(
         id="payments_test",
         task="Investigate payments-api.",
-        expected_tools=[
+
+        required_tools=[
             "get_service_status",
             "get_recent_deployments",
             "search_logs",
         ],
+
+        allowed_tools=[
+            "get_service_status",
+            "get_recent_deployments",
+            "search_logs",
+        ],
+
         expected_tool_arguments={
             "get_service_status": {
-                "service":
-                "payments-api",
+                "service": "payments-api",
             },
             "get_recent_deployments": {
-                "service":
-                "payments-api",
+                "service": "payments-api",
             },
             "search_logs": {
-                "service":
-                "payments-api",
+                "service": "payments-api",
             },
         },
+
         required_answer_terms=[
             "v2.4.1",
             "merchant_context",
         ],
+
+        require_exact_tool_sequence=True,
     )
 
     result = evaluate_trace(
@@ -193,18 +201,26 @@ def test_evaluator_detects_duplicate_call():
     case = EvalCase(
         id="duplicate_test",
         task="Check payments-api.",
-        expected_tools=[
-            "get_service_status"
+
+        required_tools=[
+            "get_service_status",
         ],
+
+        allowed_tools=[
+            "get_service_status",
+        ],
+
         expected_tool_arguments={
             "get_service_status": {
-                "service":
-                "payments-api",
+                "service": "payments-api",
             }
         },
+
         required_answer_terms=[
-            "degraded"
+            "degraded",
         ],
+
+        require_exact_tool_sequence=True,
     )
 
     result = evaluate_trace(

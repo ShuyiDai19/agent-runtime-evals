@@ -75,7 +75,10 @@ def main() -> None:
 
     runtime = AgentRuntime(
         tool_registry=build_registry(),
-        model_client=OpenAIModelClient(),
+        model_client=OpenAIModelClient(
+            timeout=30.0,
+            max_retries=0,
+        ),
     )
 
     cases = load_cases()

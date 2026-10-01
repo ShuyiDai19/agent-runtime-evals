@@ -78,6 +78,15 @@ def print_eval_report(
             f"{status:>10}"
         )
 
+        if result.failure_reasons:
+            reasons = ", ".join(
+                result.failure_reasons
+            )
+
+            print(
+                f"  -> {reasons}"
+            )
+
     print("-" * 52)
 
     print(

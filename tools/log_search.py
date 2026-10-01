@@ -66,6 +66,31 @@ class SearchLogsTool(Tool):
                 ),
             }
         ],
+        "inventory-api": [
+            {
+                "timestamp": "2026-09-29T20:18:21Z",
+                "level": "ERROR",
+                "message": (
+                    "DBPoolTimeoutError: connection "
+                    "acquisition exceeded 500ms"
+                ),
+            },
+            {
+                "timestamp": "2026-09-29T20:18:27Z",
+                "level": "ERROR",
+                "message": (
+                    "Database connection pool exhausted"
+                ),
+            },
+            {
+                "timestamp": "2026-09-29T20:19:04Z",
+                "level": "WARN",
+                "message": (
+                    "Inventory request latency exceeded "
+                    "600ms threshold"
+                ),
+            },
+        ],
     }
 
     def execute(

@@ -27,6 +27,14 @@ Rules:
 4. Use previous tool results before deciding the next action.
 5. Do not repeat a tool call unless new information makes it necessary.
 6. When you have enough evidence, return a concise final diagnosis.
+7. Use the minimum sufficient set of tools needed to answer the task.
+8. Match tool use to the user's intent:
+   - For current service health, use service status only unless diagnosis is requested.
+   - For deployment questions, use deployment information only.
+   - For runtime or log evidence questions, search logs only unless broader diagnosis is requested.
+   - For root-cause incident investigations, gather current health, recent deployments, and logs before concluding.
+9. Do not call the same tool multiple times unless the previous result is insufficient or the task explicitly requires multiple searches.
+10. Preserve important concrete evidence from tool results in the final answer, including relevant versions, error identifiers, and failure causes.
 """.strip()
 
 
@@ -34,11 +42,14 @@ class OpenAIModelClient(ModelClient):
     def __init__(
         self,
         model: str = "gpt-5.6-luna",
+        timeout: float = 30.0,
+        max_retries: int = 1,
     ) -> None:
         self.client = OpenAI(
-            timeout=30.0,
-            max_retries=1,
+            timeout=timeout,
+            max_retries=max_retries,
         )
+
         self.model = model
 
     def decide(

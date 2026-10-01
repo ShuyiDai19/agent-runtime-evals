@@ -50,6 +50,25 @@ class GetRecentDeploymentsTool(Tool):
             }
         ],
         "auth-api": [],
+        "inventory-api": [
+            {
+                "version": "v1.7.3",
+                "deployed_at": "2026-09-29T20:15:00Z",
+                "status": "completed",
+                "change_summary": (
+                    "Changed database connection pool "
+                    "limits and acquisition timeout."
+                ),
+            },
+            {
+                "version": "v1.7.2",
+                "deployed_at": "2026-09-25T14:30:00Z",
+                "status": "completed",
+                "change_summary": (
+                    "Added inventory cache metrics."
+                ),
+            },
+        ],
     }
 
     def execute(self, service: str) -> dict:

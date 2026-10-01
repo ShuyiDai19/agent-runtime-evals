@@ -34,6 +34,11 @@ class GetServiceStatusTool(Tool):
             "error_rate": 0.004,
             "latency_ms": 98,
         },
+        "inventory-api": {
+            "status": "degraded",
+            "error_rate": 0.091,
+            "latency_ms": 651,
+        },
     }
 
     def execute(self, service: str) -> dict:
