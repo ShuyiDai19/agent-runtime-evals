@@ -1,0 +1,341 @@
+[
+  {
+    "case_id": "payments_incident_vague",
+    "runtime_status": "success",
+    "expected_tools": [
+      "get_service_status",
+      "get_recent_deployments",
+      "search_logs"
+    ],
+    "actual_tools": [
+      "get_service_status",
+      "search_logs",
+      "get_recent_deployments"
+    ],
+    "required_tool_coverage": 1.0,
+    "tool_precision": 1.0,
+    "argument_accuracy": 1.0,
+    "answer_term_coverage": 1.0,
+    "exact_tool_sequence_match": false,
+    "duplicate_tool_calls": 0,
+    "extra_tool_calls": 0,
+    "agent_steps": 4,
+    "tool_calls": 3,
+    "tool_call_efficiency": 1.0,
+    "task_success": true,
+    "trajectory_pass": true,
+    "repeated_tool_calls": 0,
+    "total_latency_ms": 11677.809,
+    "model_latency_ms": 11676.96016698028,
+    "tool_latency_ms": 0.22941597853787243,
+    "failure_reasons": []
+  },
+  {
+    "case_id": "inventory_incident_vague",
+    "runtime_status": "success",
+    "expected_tools": [
+      "get_service_status",
+      "get_recent_deployments",
+      "search_logs"
+    ],
+    "actual_tools": [
+      "get_service_status",
+      "get_recent_deployments",
+      "search_logs"
+    ],
+    "required_tool_coverage": 1.0,
+    "tool_precision": 1.0,
+    "argument_accuracy": 1.0,
+    "answer_term_coverage": 1.0,
+    "exact_tool_sequence_match": true,
+    "duplicate_tool_calls": 0,
+    "extra_tool_calls": 0,
+    "agent_steps": 4,
+    "tool_calls": 3,
+    "tool_call_efficiency": 1.0,
+    "task_success": true,
+    "trajectory_pass": true,
+    "repeated_tool_calls": 0,
+    "total_latency_ms": 9172.407,
+    "model_latency_ms": 9171.652334014652,
+    "tool_latency_ms": 0.2119590062648058,
+    "failure_reasons": []
+  },
+  {
+    "case_id": "payments_current_health",
+    "runtime_status": "success",
+    "expected_tools": [
+      "get_service_status"
+    ],
+    "actual_tools": [
+      "get_service_status"
+    ],
+    "required_tool_coverage": 1.0,
+    "tool_precision": 1.0,
+    "argument_accuracy": 1.0,
+    "answer_term_coverage": 1.0,
+    "exact_tool_sequence_match": true,
+    "duplicate_tool_calls": 0,
+    "extra_tool_calls": 0,
+    "agent_steps": 2,
+    "tool_calls": 1,
+    "tool_call_efficiency": 1.0,
+    "task_success": true,
+    "trajectory_pass": true,
+    "repeated_tool_calls": 0,
+    "total_latency_ms": 3691.022,
+    "model_latency_ms": 3690.592792001553,
+    "tool_latency_ms": 0.08708398672752082,
+    "failure_reasons": []
+  },
+  {
+    "case_id": "checkout_current_health",
+    "runtime_status": "success",
+    "expected_tools": [
+      "get_service_status"
+    ],
+    "actual_tools": [
+      "get_service_status"
+    ],
+    "required_tool_coverage": 1.0,
+    "tool_precision": 1.0,
+    "argument_accuracy": 1.0,
+    "answer_term_coverage": 1.0,
+    "exact_tool_sequence_match": true,
+    "duplicate_tool_calls": 0,
+    "extra_tool_calls": 0,
+    "agent_steps": 2,
+    "tool_calls": 1,
+    "tool_call_efficiency": 1.0,
+    "task_success": true,
+    "trajectory_pass": true,
+    "repeated_tool_calls": 0,
+    "total_latency_ms": 2620.055,
+    "model_latency_ms": 2619.8112920101266,
+    "tool_latency_ms": 0.03604099038057029,
+    "failure_reasons": []
+  },
+  {
+    "case_id": "auth_current_health",
+    "runtime_status": "success",
+    "expected_tools": [
+      "get_service_status"
+    ],
+    "actual_tools": [
+      "get_service_status",
+      "search_logs"
+    ],
+    "required_tool_coverage": 1.0,
+    "tool_precision": 0.5,
+    "argument_accuracy": 1.0,
+    "answer_term_coverage": 1.0,
+    "exact_tool_sequence_match": false,
+    "duplicate_tool_calls": 0,
+    "extra_tool_calls": 1,
+    "agent_steps": 3,
+    "tool_calls": 2,
+    "tool_call_efficiency": 0.5,
+    "task_success": true,
+    "trajectory_pass": false,
+    "repeated_tool_calls": 0,
+    "total_latency_ms": 6067.216,
+    "model_latency_ms": 6066.921374993399,
+    "tool_latency_ms": 0.0858750136103481,
+    "failure_reasons": [
+      "unnecessary_tool",
+      "extra_tool_call",
+      "incorrect_tool_sequence"
+    ]
+  },
+  {
+    "case_id": "payments_recent_change",
+    "runtime_status": "success",
+    "expected_tools": [
+      "get_recent_deployments"
+    ],
+    "actual_tools": [
+      "get_recent_deployments"
+    ],
+    "required_tool_coverage": 1.0,
+    "tool_precision": 1.0,
+    "argument_accuracy": 1.0,
+    "answer_term_coverage": 1.0,
+    "exact_tool_sequence_match": true,
+    "duplicate_tool_calls": 0,
+    "extra_tool_calls": 0,
+    "agent_steps": 2,
+    "tool_calls": 1,
+    "tool_call_efficiency": 1.0,
+    "task_success": true,
+    "trajectory_pass": true,
+    "repeated_tool_calls": 0,
+    "total_latency_ms": 3212.6769999999997,
+    "model_latency_ms": 3212.4005010409746,
+    "tool_latency_ms": 0.06262501119635999,
+    "failure_reasons": []
+  },
+  {
+    "case_id": "inventory_recent_change",
+    "runtime_status": "success",
+    "expected_tools": [
+      "get_recent_deployments"
+    ],
+    "actual_tools": [
+      "get_recent_deployments"
+    ],
+    "required_tool_coverage": 1.0,
+    "tool_precision": 1.0,
+    "argument_accuracy": 1.0,
+    "answer_term_coverage": 1.0,
+    "exact_tool_sequence_match": true,
+    "duplicate_tool_calls": 0,
+    "extra_tool_calls": 0,
+    "agent_steps": 2,
+    "tool_calls": 1,
+    "tool_call_efficiency": 1.0,
+    "task_success": true,
+    "trajectory_pass": true,
+    "repeated_tool_calls": 0,
+    "total_latency_ms": 3953.873,
+    "model_latency_ms": 3953.6727490194608,
+    "tool_latency_ms": 0.04874999285675585,
+    "failure_reasons": []
+  },
+  {
+    "case_id": "checkout_recent_change",
+    "runtime_status": "success",
+    "expected_tools": [
+      "get_recent_deployments"
+    ],
+    "actual_tools": [
+      "get_recent_deployments"
+    ],
+    "required_tool_coverage": 1.0,
+    "tool_precision": 1.0,
+    "argument_accuracy": 1.0,
+    "answer_term_coverage": 1.0,
+    "exact_tool_sequence_match": true,
+    "duplicate_tool_calls": 0,
+    "extra_tool_calls": 0,
+    "agent_steps": 2,
+    "tool_calls": 1,
+    "tool_call_efficiency": 1.0,
+    "task_success": true,
+    "trajectory_pass": true,
+    "repeated_tool_calls": 0,
+    "total_latency_ms": 2918.484,
+    "model_latency_ms": 2918.3101669768803,
+    "tool_latency_ms": 0.02475001383572817,
+    "failure_reasons": []
+  },
+  {
+    "case_id": "payments_error_evidence",
+    "runtime_status": "success",
+    "expected_tools": [
+      "search_logs"
+    ],
+    "actual_tools": [
+      "search_logs"
+    ],
+    "required_tool_coverage": 1.0,
+    "tool_precision": 1.0,
+    "argument_accuracy": 1.0,
+    "answer_term_coverage": 1.0,
+    "exact_tool_sequence_match": true,
+    "duplicate_tool_calls": 0,
+    "extra_tool_calls": 0,
+    "agent_steps": 2,
+    "tool_calls": 1,
+    "tool_call_efficiency": 1.0,
+    "task_success": true,
+    "trajectory_pass": true,
+    "repeated_tool_calls": 0,
+    "total_latency_ms": 4718.945,
+    "model_latency_ms": 4718.825166026363,
+    "tool_latency_ms": 0.03083300543949008,
+    "failure_reasons": []
+  },
+  {
+    "case_id": "inventory_error_evidence",
+    "runtime_status": "success",
+    "expected_tools": [
+      "search_logs"
+    ],
+    "actual_tools": [
+      "search_logs"
+    ],
+    "required_tool_coverage": 1.0,
+    "tool_precision": 1.0,
+    "argument_accuracy": 1.0,
+    "answer_term_coverage": 1.0,
+    "exact_tool_sequence_match": true,
+    "duplicate_tool_calls": 0,
+    "extra_tool_calls": 0,
+    "agent_steps": 2,
+    "tool_calls": 1,
+    "tool_call_efficiency": 1.0,
+    "task_success": true,
+    "trajectory_pass": true,
+    "repeated_tool_calls": 0,
+    "total_latency_ms": 4020.449,
+    "model_latency_ms": 4020.211291004671,
+    "tool_latency_ms": 0.07312500383704901,
+    "failure_reasons": []
+  },
+  {
+    "case_id": "unknown_service_health",
+    "runtime_status": "success",
+    "expected_tools": [
+      "get_service_status"
+    ],
+    "actual_tools": [
+      "get_service_status"
+    ],
+    "required_tool_coverage": 1.0,
+    "tool_precision": 1.0,
+    "argument_accuracy": 1.0,
+    "answer_term_coverage": 1.0,
+    "exact_tool_sequence_match": true,
+    "duplicate_tool_calls": 0,
+    "extra_tool_calls": 0,
+    "agent_steps": 2,
+    "tool_calls": 1,
+    "tool_call_efficiency": 1.0,
+    "task_success": true,
+    "trajectory_pass": true,
+    "repeated_tool_calls": 0,
+    "total_latency_ms": 2870.715,
+    "model_latency_ms": 2870.398416998796,
+    "tool_latency_ms": 0.08987501496449113,
+    "failure_reasons": []
+  },
+  {
+    "case_id": "checkout_possible_incident",
+    "runtime_status": "success",
+    "expected_tools": [
+      "get_service_status",
+      "search_logs"
+    ],
+    "actual_tools": [
+      "get_service_status",
+      "search_logs"
+    ],
+    "required_tool_coverage": 1.0,
+    "tool_precision": 1.0,
+    "argument_accuracy": 1.0,
+    "answer_term_coverage": 1.0,
+    "exact_tool_sequence_match": true,
+    "duplicate_tool_calls": 0,
+    "extra_tool_calls": 0,
+    "agent_steps": 3,
+    "tool_calls": 2,
+    "tool_call_efficiency": 1.0,
+    "task_success": true,
+    "trajectory_pass": true,
+    "repeated_tool_calls": 0,
+    "total_latency_ms": 5732.754,
+    "model_latency_ms": 5732.374917977722,
+    "tool_latency_ms": 0.10595799540169537,
+    "failure_reasons": []
+  }
+]
