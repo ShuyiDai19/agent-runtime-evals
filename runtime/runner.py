@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from time import perf_counter
 from typing import Any
 from uuid import uuid4
 
@@ -17,6 +16,9 @@ from runtime.schemas import (
     utc_now,
 )
 from runtime.tool_registry import ToolRegistry
+from time import perf_counter, sleep
+
+from runtime.errors import RetryableToolError
 
 
 class AgentRuntime:
@@ -71,7 +73,7 @@ class AgentRuntime:
 
             if isinstance(decision, ToolCallDecision):
                 try:
-                    result = self.execute_tool_call(
+                    result = self._execute_tool_with_retries(
                         trace=trace,
                         tool_call=decision.tool_call,
                     )
@@ -152,12 +154,14 @@ class AgentRuntime:
         self,
         trace: RunTrace,
         tool_call: ToolCall,
+        attempt: int = 1,
     ) -> Any:
         step = TraceStep(
             step_index=len(trace.steps),
             step_type=StepType.TOOL_CALL,
             tool_name=tool_call.tool_name,
             tool_arguments=tool_call.arguments,
+            attempt=attempt,
         )
 
         start = perf_counter()
@@ -248,4 +252,40 @@ class AgentRuntime:
 
         trace.total_latency_ms = (
             elapsed.total_seconds() * 1000
+        )
+
+    def _execute_tool_with_retries(
+        self,
+        trace: RunTrace,
+        tool_call: ToolCall,
+    ) -> Any:
+        total_attempts = (
+            1 + self.config.max_tool_retries
+        )
+
+        for attempt in range(
+            1,
+            total_attempts + 1,
+        ):
+            try:
+                return self.execute_tool_call(
+                    trace=trace,
+                    tool_call=tool_call,
+                    attempt=attempt,
+                )
+
+            except RetryableToolError:
+                if attempt >= total_attempts:
+                    raise
+
+                delay = (
+                    self.config.retry_backoff_seconds
+                    * (2 ** (attempt - 1))
+                )
+
+                if delay > 0:
+                    sleep(delay)
+
+        raise RuntimeError(
+            "Tool retry loop exited unexpectedly."
         )

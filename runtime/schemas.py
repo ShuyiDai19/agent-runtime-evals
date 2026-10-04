@@ -60,7 +60,8 @@ class TraceStep(BaseModel):
     message: str | None = None
     error_type: str | None = None
     error_message: str | None = None
-    
+    attempt: int | None = None
+
 
 class RunTrace(BaseModel):
     run_id: str
