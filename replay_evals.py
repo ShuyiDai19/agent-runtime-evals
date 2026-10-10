@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import argparse
 import json
 from pathlib import Path
 
@@ -9,13 +10,7 @@ from evals.schemas import EvalCase
 from runtime.schemas import RunTrace
 
 
-DATASET_PATH = Path(
-    "evals/dataset.json"
-)
-
-TRACE_DIR = Path(
-    "evals/results/baseline_traces"
-)
+DATASET_PATH = Path("evals/dataset.json")
 
 
 def load_cases() -> list[EvalCase]:
@@ -29,14 +24,34 @@ def load_cases() -> list[EvalCase]:
     ]
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "--trace-dir",
+        type=Path,
+        required=True,
+    )
+
+    parser.add_argument(
+        "--output",
+        type=Path,
+        required=True,
+    )
+
+    return parser.parse_args()
+
+
 def main() -> None:
+    args = parse_args()
+
     cases = load_cases()
 
     results = []
 
     for case in cases:
         trace_path = (
-            TRACE_DIR
+            args.trace_dir
             / f"{case.id}.json"
         )
 
@@ -56,6 +71,21 @@ def main() -> None:
         )
 
         results.append(result)
+
+    args.output.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    args.output.write_text(
+        json.dumps(
+            [
+                result.model_dump()
+                for result in results
+            ],
+            indent=2,
+        )
+    )
 
     print_eval_report(results)
 

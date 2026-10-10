@@ -235,30 +235,31 @@
     {
       "id": "checkout_possible_incident",
       "task": "A user says checkout feels slow. Investigate checkout-api and determine whether the available operational evidence shows an active incident.",
+      
       "required_tools": [
         "get_service_status",
-        "get_recent_deployments",
         "search_logs"
       ],
+      
       "allowed_tools": [
         "get_service_status",
         "get_recent_deployments",
         "search_logs"
       ],
+      
       "expected_tool_arguments": {
         "get_service_status": {
-          "service": "checkout-api"
-        },
-        "get_recent_deployments": {
           "service": "checkout-api"
         },
         "search_logs": {
           "service": "checkout-api"
         }
       },
+      
       "required_answer_terms": [
         "healthy"
       ],
+      
       "require_exact_tool_sequence": false
     }
   ]
