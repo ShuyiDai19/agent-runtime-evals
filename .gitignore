@@ -1,5 +1,11 @@
 .env
 .venv/
 __pycache__/
-.pytest_cache/
 *.pyc
+.pytest_cache/
+.DS_Store
+
+# Generated evaluation outputs
+evals/results/latest.json
+evals/results/traces/
+evals/results/improved_traces/
